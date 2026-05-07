@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeu des Nombres Rapides</title>
+
+  <!-- Importation de la police Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Lien vers la feuille de style principale -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ======================================================
+       ÉCRAN D'ACCUEIL
+       Affiché au démarrage du jeu, avant que la partie commence.
+  ====================================================== -->
+  <div id="ecran-accueil" class="ecran actif">
+
+    <!-- Titre principal avec effet de lueur néon -->
+    <div class="logo-zone">
+      <div class="logo-subtitle">Réflexes &amp; Précision</div>
+      <h1 class="titre-principal">NOMBRES<br/><span class="titre-accent">RAPIDES</span></h1>
+    </div>
+
+    <!-- Description des règles du jeu -->
+    <div class="regles-accueil">
+      <p>Un nombre entre <strong>1</strong> et <strong>10</strong> s'affiche toutes les <strong>0.5s</strong>.</p>
+      <p>Appuyez sur le bon nombre avant qu'il change !</p>
+      <p>Vous avez <strong>60 secondes</strong> pour marquer un maximum de points</p>
+    </div>
+
+    <!-- Bouton pour démarrer la partie -->
+    <button id="btn-lancer" class="btn-principal" onclick="lancerJeu()">
+      <span class="btn-icone">▶</span> Lancer le jeu
+    </button>
+
+    <!-- Décoration visuelle de fond -->
+    <div class="decoration-grille"></div>
+  </div>
+
+
+  <!-- ======================================================
+       ÉCRAN DE JEU
+       Visible uniquement pendant la partie.
+  ====================================================== -->
+  <div id="ecran-jeu" class="ecran">
+
+    <!-- Barre supérieure : score et compte à rebours -->
+    <div class="barre-info">
+
+      <!-- Affichage du score du joueur -->
+      <div class="info-bloc">
+        <div class="info-label">Score</div>
+        <div id="affichage-score" class="info-valeur">0</div>
+      </div>
+
+      <!-- Compte à rebours circulaire au centre -->
+      <div class="minuterie-zone">
+        <svg class="minuterie-svg" viewBox="0 0 120 120">
+          <!-- Cercle de fond (piste) -->
+          <circle class="cercle-fond" cx="60" cy="60" r="50" />
+          <!-- Cercle de progression (se réduit avec le temps) -->
+          <circle id="cercle-temps" class="cercle-progression" cx="60" cy="60" r="50" />
+        </svg>
+        <!-- Valeur numérique du temps restant -->
+        <div id="affichage-temps" class="minuterie-chiffre">60</div>
+      </div>
+
+      <!-- Affichage du meilleur score (session) -->
+      <div class="info-bloc">
+        <div class="info-label">Meilleur</div>
+        <div id="affichage-record" class="info-valeur">0</div>
+      </div>
+    </div>
+
+    <!-- Zone centrale : le nombre à deviner, affiché en grand -->
+    <div class="zone-nombre">
+      <div class="nombre-etiquette">Quel est ce nombre ?</div>
+      <div id="nombre-affiche" class="nombre-cible">?</div>
+      <!-- Barre de progression de la fenêtre de 500 ms -->
+      <div class="barre-tempo">
+        <div id="barre-progression" class="barre-remplissage"></div>
+      </div>
+    </div>
+
+    <!-- Pavé numérique : boutons de 1 à 10 -->
+    <div class="pave-numerique">
+      <!-- Les boutons 1 à 9 -->
+      <button class="touche" onclick="selectionnerNombre(1)">1</button>
+      <button class="touche" onclick="selectionnerNombre(2)">2</button>
+      <button class="touche" onclick="selectionnerNombre(3)">3</button>
+      <button class="touche" onclick="selectionnerNombre(4)">4</button>
+      <button class="touche" onclick="selectionnerNombre(5)">5</button>
+      <button class="touche" onclick="selectionnerNombre(6)">6</button>
+      <button class="touche" onclick="selectionnerNombre(7)">7</button>
+      <button class="touche" onclick="selectionnerNombre(8)">8</button>
+      <button class="touche" onclick="selectionnerNombre(9)">9</button>
+      <!-- Le bouton 10 occupe toute la largeur de la ligne -->
+      <button class="touche touche-dix" onclick="selectionnerNombre(10)">10</button>
+    </div>
+
+    <!-- Feedback textuel affiché brièvement après chaque réponse -->
+    <div id="zone-feedback" class="feedback-zone"></div>
+
+    <!-- Décoration visuelle de fond -->
+    <div class="decoration-grille"></div>
+  </div>
+
+
+  <!-- ======================================================
+       ÉCRAN DE FIN DE PARTIE
+       Affiché à l'expiration du compte à rebours.
+  ====================================================== -->
+  <div id="ecran-fin" class="ecran">
+
+    <!-- Titre de fin -->
+    <h2 class="titre-fin">Fin du jeu</h2>
+
+    <!-- Résumé des résultats -->
+    <div class="resultats-zone">
+      <div class="resultat-item">
+        <span class="resultat-label">Votre score</span>
+        <span id="score-final" class="resultat-valeur couleur-score">0</span>
+      </div>
+      <div class="resultat-item">
+        <span class="resultat-label">Meilleur score</span>
+        <span id="record-final" class="resultat-valeur couleur-record">0</span>
+      </div>
+    </div>
+
+    <!-- Message d'évaluation selon la performance -->
+    <div id="message-performance" class="message-perf"></div>
+
+    <!-- Boutons de navigation post-partie -->
+    <div class="boutons-fin">
+      <button class="btn-principal" onclick="lancerJeu()">
+        <span class="btn-icone">↺</span> Rejouer
+      </button>
+      <button class="btn-secondaire" onclick="allerAccueil()">
+        <span class="btn-icone">⌂</span> Accueil
+      </button>
+    </div>
+
+    <!-- Décoration visuelle de fond -->
+    <div class="decoration-grille"></div>
+  </div>
+
+
+  <!-- Lien vers le script JavaScript -->
+  <script src="script.js"></script>
+
+</body>
+</html>
