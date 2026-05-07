@@ -1,7 +1,6 @@
 /* ============================================================
    STYLE.CSS — Jeu des Nombres Rapides
-   Thème : Cyberpunk Néon — sombre, lumineux, futuriste
-   Auteur : Générateur de jeu
+   Thème : Pastel Doux — rose, lavande, fond lumineux
    ============================================================ */
 
 /* ─────────────────────────────────────────────
@@ -9,18 +8,18 @@
    ───────────────────────────────────────────── */
 :root {
   /* Palette de couleurs */
-  --couleur-fond:        #050a14;       /* Fond principal très sombre */
-  --couleur-fond-carte:  #0d1626;       /* Fond des cartes / blocs */
-  --couleur-bordure:     #1a2d50;       /* Bordure subtile */
+  --couleur-fond:        #fdf4f8;       /* Fond principal très clair, rosé */
+  --couleur-fond-carte:  #fff8fb;       /* Fond des cartes / blocs */
+  --couleur-bordure:     #f0c8de;       /* Bordure subtile rose */
 
-  --neon-cyan:    #00f5ff;              /* Néon bleu-cyan principal */
-  --neon-rose:    #ff006e;              /* Néon rose pour les accents */
-  --neon-vert:    #00ff88;             /* Néon vert pour le succès */
-  --neon-orange:  #ff8c00;             /* Néon orange pour l'urgence */
-  --neon-violet:  #b400ff;             /* Néon violet pour les décos */
+  --pastel-rose:    #e8649a;            /* Rose principal */
+  --pastel-lavande: #9b7fd4;            /* Lavande pour les accents */
+  --pastel-vert:    #6dbf8e;            /* Vert doux pour le succès */
+  --pastel-peche:   #f4956a;            /* Pêche pour l'urgence */
+  --pastel-lilas:   #c48fe0;            /* Lilas pour les décos */
 
-  --texte-principal:  #e0eeff;          /* Texte clair sur fond sombre */
-  --texte-secondaire: #6a8aaa;          /* Texte atténué */
+  --texte-principal:  #3d2040;          /* Texte sombre sur fond clair */
+  --texte-secondaire: #9b7a92;          /* Texte atténué */
 
   /* Typographie */
   --police-titre: 'Orbitron', monospace;
@@ -28,9 +27,9 @@
 
   /* Dimensions */
   --rayon-carte: 16px;
-  --ombre-neon-cyan:  0 0 10px var(--neon-cyan), 0 0 30px var(--neon-cyan), 0 0 60px rgba(0,245,255,0.3);
-  --ombre-neon-rose:  0 0 10px var(--neon-rose), 0 0 30px var(--neon-rose), 0 0 60px rgba(255,0,110,0.3);
-  --ombre-neon-vert:  0 0 10px var(--neon-vert), 0 0 25px rgba(0,255,136,0.4);
+  --ombre-rose:    0 0 12px rgba(232,100,154,0.35), 0 0 30px rgba(232,100,154,0.15);
+  --ombre-lavande: 0 0 12px rgba(155,127,212,0.35), 0 0 30px rgba(155,127,212,0.15);
+  --ombre-vert:    0 0 10px rgba(109,191,142,0.35), 0 0 22px rgba(109,191,142,0.15);
 }
 
 /* Reset universel */
@@ -46,7 +45,7 @@ body {
   background-color: var(--couleur-fond);
   color: var(--texte-principal);
   min-height: 100vh;
-  overflow: hidden;               /* Évite le défilement inutile */
+  overflow: hidden;
   position: relative;
 }
 
@@ -54,11 +53,9 @@ body {
 /* ─────────────────────────────────────────────
    2. GESTION DES ÉCRANS (accueil / jeu / fin)
    ───────────────────────────────────────────── */
-
-/* Tous les écrans sont superposés et invisibles par défaut */
 .ecran {
   position: fixed;
-  inset: 0;                        /* Couvre tout l'espace disponible */
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,13 +63,12 @@ body {
   gap: 28px;
   padding: 24px;
   opacity: 0;
-  pointer-events: none;            /* Non cliquable quand invisible */
-  transform: translateY(20px);     /* Légèrement décalé vers le bas */
+  pointer-events: none;
+  transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
   z-index: 1;
 }
 
-/* L'écran actif devient visible */
 .ecran.actif {
   opacity: 1;
   pointer-events: all;
@@ -81,34 +77,29 @@ body {
 
 
 /* ─────────────────────────────────────────────
-   3. DÉCORATION DE FOND : GRILLE CYBERPUNK
+   3. DÉCORATION DE FOND : MOTIF PASTEL DOUX
    ───────────────────────────────────────────── */
 .decoration-grille {
   position: fixed;
   inset: 0;
-  z-index: -1;                     /* Derrière tout le contenu */
+  z-index: -1;
   background-image:
-    /* Lignes horizontales */
-    linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
-    /* Lignes verticales */
-    linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(232,100,154,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155,127,212,0.06) 1px, transparent 1px);
   background-size: 60px 60px;
-  /* Animation de défilement vers le bas pour l'effet dynamique */
-  animation: defilementGrille 8s linear infinite;
+  animation: defilementGrille 10s linear infinite;
 }
 
-/* Point de perspective de la grille (effet 3D) */
 .decoration-grille::after {
   content: '';
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 50% 100%,
-    rgba(0,245,255,0.06) 0%,
-    transparent 70%);
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(232,100,154,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(155,127,212,0.10) 0%, transparent 60%);
   pointer-events: none;
 }
 
-/* Animation de défilement de la grille */
 @keyframes defilementGrille {
   from { background-position: 0 0; }
   to   { background-position: 0 60px; }
@@ -118,46 +109,39 @@ body {
 /* ─────────────────────────────────────────────
    4. ÉCRAN D'ACCUEIL
    ───────────────────────────────────────────── */
-
-/* Zone du logo / titre */
 .logo-zone {
   text-align: center;
   margin-bottom: 8px;
 }
 
-/* Sous-titre du logo */
 .logo-subtitle {
   font-family: var(--police-corps);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 4px;
-  color: var(--neon-cyan);
+  color: var(--pastel-lavande);
   text-transform: uppercase;
   margin-bottom: 12px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-/* Titre principal "NOMBRES RAPIDES" */
 .titre-principal {
   font-family: var(--police-titre);
-  font-size: clamp(2.5rem, 8vw, 5rem); /* Taille responsive */
+  font-size: clamp(2.5rem, 8vw, 5rem);
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
   color: var(--texte-principal);
   letter-spacing: 6px;
-  /* Animation de scintillement au chargement */
   animation: apparitionTitre 0.8s ease both;
 }
 
-/* Accent coloré sur "RAPIDES" */
 .titre-accent {
-  color: var(--neon-cyan);
-  text-shadow: var(--ombre-neon-cyan);
+  color: var(--pastel-rose);
+  text-shadow: var(--ombre-rose);
   display: block;
 }
 
-/* Animation d'apparition du titre */
 @keyframes apparitionTitre {
   from {
     opacity: 0;
@@ -171,10 +155,9 @@ body {
   }
 }
 
-/* Bloc des règles du jeu */
 .regles-accueil {
-  background: rgba(0,245,255,0.04);
-  border: 1px solid rgba(0,245,255,0.15);
+  background: rgba(232,100,154,0.06);
+  border: 1px solid rgba(232,100,154,0.20);
   border-radius: var(--rayon-carte);
   padding: 20px 32px;
   text-align: center;
@@ -185,7 +168,7 @@ body {
 }
 
 .regles-accueil strong {
-  color: var(--neon-cyan);
+  color: var(--pastel-rose);
   font-weight: 600;
 }
 
@@ -193,66 +176,59 @@ body {
 /* ─────────────────────────────────────────────
    5. BOUTONS
    ───────────────────────────────────────────── */
-
-/* Bouton principal (cyan néon) */
 .btn-principal {
   font-family: var(--police-titre);
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--couleur-fond);
-  background: var(--neon-cyan);
+  color: #fff;
+  background: linear-gradient(135deg, var(--pastel-rose), var(--pastel-lavande));
   border: none;
-  border-radius: 50px;            /* Pilule arrondie */
+  border-radius: 50px;
   padding: 16px 40px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--ombre-neon-cyan);
+  box-shadow: var(--ombre-rose);
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-/* Icône dans le bouton */
 .btn-principal .btn-icone {
   margin-right: 8px;
 }
 
-/* Effet de survol du bouton principal */
 .btn-principal:hover {
   transform: scale(1.06);
-  box-shadow: 0 0 20px var(--neon-cyan), 0 0 50px rgba(0,245,255,0.5);
+  box-shadow: 0 0 20px rgba(232,100,154,0.45), 0 0 45px rgba(155,127,212,0.25);
 }
 
-/* Effet d'appui */
 .btn-principal:active {
   transform: scale(0.97);
 }
 
-/* Bouton secondaire (contour rose) */
 .btn-secondaire {
   font-family: var(--police-titre);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--neon-rose);
+  color: var(--pastel-lavande);
   background: transparent;
-  border: 2px solid var(--neon-rose);
+  border: 2px solid var(--pastel-lavande);
   border-radius: 50px;
   padding: 14px 36px;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(255,0,110,0.3);
+  box-shadow: 0 0 10px rgba(155,127,212,0.20);
   transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-secondaire:hover {
-  background: rgba(255,0,110,0.12);
-  box-shadow: var(--ombre-neon-rose);
+  background: rgba(155,127,212,0.10);
+  box-shadow: var(--ombre-lavande);
   transform: scale(1.05);
 }
 
-/* Groupe de boutons côte à côte */
 .boutons-fin {
   display: flex;
   gap: 16px;
@@ -264,28 +240,25 @@ body {
 /* ─────────────────────────────────────────────
    6. ÉCRAN DE JEU — BARRE D'INFORMATIONS
    ───────────────────────────────────────────── */
-
-/* Barre supérieure contenant score et minuterie */
 .barre-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   max-width: 500px;
-  background: rgba(13,22,38,0.8);
+  background: rgba(255,248,251,0.85);
   border: 1px solid var(--couleur-bordure);
-  border-radius: 80px;            /* Capsule */
+  border-radius: 80px;
   padding: 12px 24px;
   backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(232,100,154,0.10);
 }
 
-/* Bloc individuel (score ou record) */
 .info-bloc {
   text-align: center;
   min-width: 70px;
 }
 
-/* Étiquette du bloc (ex: "Score") */
 .info-label {
   font-family: var(--police-corps);
   font-size: 0.7rem;
@@ -296,17 +269,15 @@ body {
   margin-bottom: 2px;
 }
 
-/* Valeur numérique du bloc */
 .info-valeur {
   font-family: var(--police-titre);
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--neon-cyan);
-  text-shadow: 0 0 10px rgba(0,245,255,0.5);
+  color: var(--pastel-rose);
+  text-shadow: 0 0 8px rgba(232,100,154,0.30);
   transition: transform 0.15s ease;
 }
 
-/* Légère animation au changement de score */
 .info-valeur.pulse {
   transform: scale(1.3);
 }
@@ -315,42 +286,35 @@ body {
 /* ─────────────────────────────────────────────
    7. MINUTERIE CIRCULAIRE SVG
    ───────────────────────────────────────────── */
-
-/* Conteneur de la minuterie (positionnement relatif) */
 .minuterie-zone {
   position: relative;
   width: 80px;
   height: 80px;
 }
 
-/* SVG qui contient les cercles */
 .minuterie-svg {
   width: 100%;
   height: 100%;
-  transform: rotate(-90deg);      /* Le cercle commence en haut */
+  transform: rotate(-90deg);
 }
 
-/* Cercle de fond (piste grisée) */
 .cercle-fond {
   fill: none;
-  stroke: rgba(255,255,255,0.06);
+  stroke: rgba(232,100,154,0.12);
   stroke-width: 6;
 }
 
-/* Cercle de progression (s'efface avec le temps) */
 .cercle-progression {
   fill: none;
-  stroke: var(--neon-cyan);
+  stroke: var(--pastel-rose);
   stroke-width: 6;
   stroke-linecap: round;
-  /* La circonférence : 2π × r = 2π × 50 ≈ 314.16 */
   stroke-dasharray: 314.16;
-  stroke-dashoffset: 0;           /* Plein au départ, mis à jour en JS */
-  filter: drop-shadow(0 0 6px var(--neon-cyan));
+  stroke-dashoffset: 0;
+  filter: drop-shadow(0 0 5px rgba(232,100,154,0.50));
   transition: stroke-dashoffset 1s linear, stroke 0.5s ease;
 }
 
-/* Chiffre numérique au centre de la minuterie */
 .minuterie-chiffre {
   position: absolute;
   inset: 0;
@@ -367,8 +331,6 @@ body {
 /* ─────────────────────────────────────────────
    8. ZONE DU NOMBRE À DEVINER
    ───────────────────────────────────────────── */
-
-/* Conteneur du nombre cible */
 .zone-nombre {
   display: flex;
   flex-direction: column;
@@ -376,7 +338,6 @@ body {
   gap: 12px;
 }
 
-/* Étiquette au-dessus du nombre */
 .nombre-etiquette {
   font-family: var(--police-corps);
   font-size: 0.8rem;
@@ -386,39 +347,34 @@ body {
   color: var(--texte-secondaire);
 }
 
-/* Le grand nombre à deviner */
 .nombre-cible {
   font-family: var(--police-titre);
   font-size: clamp(5rem, 18vw, 9rem);
   font-weight: 900;
-  color: var(--neon-cyan);
-  text-shadow: var(--ombre-neon-cyan);
+  color: var(--pastel-lavande);
+  text-shadow: var(--ombre-lavande);
   line-height: 1;
-  /* Animation de changement de nombre */
   transition: transform 0.1s ease, opacity 0.1s ease;
   cursor: default;
 }
 
-/* Classe CSS appliquée lors du changement de nombre */
 .nombre-cible.changement {
   transform: scale(1.15);
   opacity: 0.6;
 }
 
-/* Barre de progression de la fenêtre 500 ms */
 .barre-tempo {
   width: 180px;
   height: 4px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(232,100,154,0.12);
   border-radius: 4px;
   overflow: hidden;
 }
 
-/* Remplissage qui se vide en 500 ms */
 .barre-remplissage {
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, var(--neon-violet), var(--neon-cyan));
+  background: linear-gradient(90deg, var(--pastel-lilas), var(--pastel-rose));
   border-radius: 4px;
   transform-origin: left;
 }
@@ -427,17 +383,14 @@ body {
 /* ─────────────────────────────────────────────
    9. PAVÉ NUMÉRIQUE (1-10)
    ───────────────────────────────────────────── */
-
-/* Grille 3 colonnes pour les touches 1-9, + 10 */
 .pave-numerique {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);  /* 3 colonnes égales */
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   width: 100%;
   max-width: 320px;
 }
 
-/* Chaque touche numérique */
 .touche {
   font-family: var(--police-titre);
   font-size: 1.4rem;
@@ -450,6 +403,7 @@ body {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(232,100,154,0.08);
   transition:
     background 0.15s ease,
     border-color 0.15s ease,
@@ -457,96 +411,82 @@ body {
     box-shadow 0.2s ease;
 }
 
-/* Effet de survol des touches */
 .touche:hover {
-  background: rgba(0,245,255,0.08);
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0,245,255,0.2);
+  background: rgba(232,100,154,0.08);
+  border-color: var(--pastel-rose);
+  box-shadow: 0 0 14px rgba(232,100,154,0.22);
   transform: translateY(-2px);
 }
 
-/* Effet d'appui */
 .touche:active {
   transform: scale(0.93);
-  background: rgba(0,245,255,0.15);
+  background: rgba(232,100,154,0.15);
 }
 
-/* Le bouton 10 prend toute la largeur (3 colonnes) */
 .touche-dix {
-  grid-column: 1 / -1;            /* Étirement sur toutes les colonnes */
+  grid-column: 1 / -1;
   padding: 14px 0;
 }
 
-/* Classe "correct" : flash vert sur la touche */
 .touche.correct {
-  background: rgba(0,255,136,0.2) !important;
-  border-color: var(--neon-vert)  !important;
-  box-shadow: var(--ombre-neon-vert) !important;
+  background: rgba(109,191,142,0.18) !important;
+  border-color: var(--pastel-vert)  !important;
+  box-shadow: var(--ombre-vert) !important;
 }
 
-/* Classe "incorrect" : flash rouge sur la touche */
 .touche.incorrect {
-  background: rgba(255,0,110,0.2) !important;
-  border-color: var(--neon-rose)  !important;
-  box-shadow: var(--ombre-neon-rose) !important;
+  background: rgba(232,100,154,0.18) !important;
+  border-color: var(--pastel-rose)  !important;
+  box-shadow: var(--ombre-rose) !important;
 }
 
 
 /* ─────────────────────────────────────────────
-   10. FEEDBACK (message bref après réponse)
+   10. FEEDBACK
    ───────────────────────────────────────────── */
-
-/* Zone de message de retour */
 .feedback-zone {
   font-family: var(--police-titre);
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
-  height: 28px;                   /* Hauteur fixe pour éviter le saut de mise en page */
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: opacity 0.3s ease;
 }
 
-/* Couleur verte pour le message de succès */
 .feedback-zone.bon {
-  color: var(--neon-vert);
-  text-shadow: var(--ombre-neon-vert);
+  color: var(--pastel-vert);
+  text-shadow: var(--ombre-vert);
 }
 
-/* Couleur rose pour le message d'erreur */
 .feedback-zone.mauvais {
-  color: var(--neon-rose);
-  text-shadow: var(--ombre-neon-rose);
+  color: var(--pastel-rose);
+  text-shadow: var(--ombre-rose);
 }
 
 
 /* ─────────────────────────────────────────────
    11. ÉCRAN DE FIN DE PARTIE
    ───────────────────────────────────────────── */
-
-/* Titre "Fin du jeu" */
 .titre-fin {
   font-family: var(--police-titre);
   font-size: clamp(2rem, 7vw, 3.5rem);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 6px;
-  color: var(--neon-rose);
-  text-shadow: var(--ombre-neon-rose);
-  /* Effet de scintillement */
+  color: var(--pastel-lavande);
+  text-shadow: var(--ombre-lavande);
   animation: scintillement 1.5s ease-in-out infinite alternate;
 }
 
-/* Animation de scintillement */
 @keyframes scintillement {
-  from { text-shadow: var(--ombre-neon-rose); }
-  to   { text-shadow: 0 0 5px var(--neon-rose), 0 0 15px var(--neon-rose); }
+  from { text-shadow: var(--ombre-lavande); }
+  to   { text-shadow: 0 0 5px var(--pastel-lavande), 0 0 15px var(--pastel-lavande); }
 }
 
-/* Conteneur des résultats */
 .resultats-zone {
   display: flex;
   gap: 24px;
@@ -554,20 +494,19 @@ body {
   justify-content: center;
 }
 
-/* Carte d'un résultat individuel */
 .resultat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  background: rgba(13,22,38,0.9);
+  background: rgba(255,248,251,0.92);
   border: 1px solid var(--couleur-bordure);
   border-radius: var(--rayon-carte);
   padding: 20px 32px;
   min-width: 140px;
+  box-shadow: 0 4px 16px rgba(232,100,154,0.10);
 }
 
-/* Étiquette du résultat */
 .resultat-label {
   font-family: var(--police-corps);
   font-size: 0.75rem;
@@ -577,18 +516,15 @@ body {
   color: var(--texte-secondaire);
 }
 
-/* Valeur numérique du résultat */
 .resultat-valeur {
   font-family: var(--police-titre);
   font-size: 2.8rem;
   font-weight: 900;
 }
 
-/* Couleurs distinctes pour score et record */
-.couleur-score  { color: var(--neon-cyan); text-shadow: var(--ombre-neon-cyan); }
-.couleur-record { color: var(--neon-vert); text-shadow: var(--ombre-neon-vert); }
+.couleur-score  { color: var(--pastel-rose);    text-shadow: var(--ombre-rose); }
+.couleur-record { color: var(--pastel-vert);     text-shadow: var(--ombre-vert); }
 
-/* Message d'évaluation de la performance */
 .message-perf {
   font-family: var(--police-corps);
   font-size: 1.1rem;
@@ -604,7 +540,6 @@ body {
    12. ADAPTATIONS MOBILES
    ───────────────────────────────────────────── */
 @media (max-height: 700px) {
-  /* Sur petits écrans, on réduit les espacements */
   .ecran { gap: 16px; }
   .touche { padding: 14px 0; }
   .titre-principal { font-size: 2.2rem; }
